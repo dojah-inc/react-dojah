@@ -1,5 +1,11 @@
 import React, { Component } from 'react';
 
+function _inheritsLoose(subClass, superClass) {
+  subClass.prototype = Object.create(superClass.prototype);
+  subClass.prototype.constructor = subClass;
+  subClass.__proto__ = superClass;
+}
+
 function createCommonjsModule(fn, module) {
 	return module = { exports: {} }, fn(module, module.exports), module.exports;
 }
@@ -1077,89 +1083,102 @@ if (process.env.NODE_ENV !== 'production') {
 }
 });
 
-class Dojah extends Component {
-  constructor(...args) {
-    super(...args);
+var Dojah = /*#__PURE__*/function (_Component) {
+  _inheritsLoose(Dojah, _Component);
 
-    this.load = () => {
-      const {
-        response
-      } = this.props;
+  function Dojah() {
+    var _this;
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    _this = _Component.call.apply(_Component, [this].concat(args)) || this;
+
+    _this.load = function () {
+      var response = _this.props.response;
       response('start');
-      this.open();
+
+      _this.open();
     };
 
-    this.error = () => {
-      const {
-        response
-      } = this.props;
+    _this.error = function () {
+      var response = _this.props.response;
       response('error');
-      document.head.removeChild(this.script);
+      document.head.removeChild(_this.script);
     };
 
-    this.start = () => {
-      const {
-        response
-      } = this.props;
-      const {
-        uri
-      } = Dojah.config;
+    _this.start = function () {
+      var response = _this.props.response;
+      var uri = Dojah.config.uri;
       response('loading');
-      this.script = document.createElement('script');
-      this.script.addEventListener('load', this.load);
-      this.script.addEventListener('complete', this.load);
-      this.script.addEventListener('error', this.error);
-      this.script.src = uri;
-      this.script.async = true;
-      document.head.appendChild(this.script);
+      _this.script = document.createElement('script');
+
+      _this.script.addEventListener('load', _this.load);
+
+      _this.script.addEventListener('complete', _this.load);
+
+      _this.script.addEventListener('error', _this.error);
+
+      _this.script.src = uri;
+      _this.script.async = true;
+      document.head.appendChild(_this.script);
     };
 
-    this.stop = () => {
-      this.script.removeEventListener('load', this.load);
-      this.script.removeEventListener('error', this.error);
-      document.head.removeChild(this.script);
+    _this.stop = function () {
+      _this.script.removeEventListener('load', _this.load);
+
+      _this.script.removeEventListener('error', _this.error);
+
+      document.head.removeChild(_this.script);
     };
 
-    this.open = () => {
-      const {
-        appID,
-        publicKey,
-        response
-      } = this.props;
-      const options = {
+    _this.open = function () {
+      var _this$props = _this.props,
+          appID = _this$props.appID,
+          publicKey = _this$props.publicKey,
+          response = _this$props.response;
+      var options = {
         app_id: appID,
         p_key: publicKey,
-        onSuccess: data => {
+        onSuccess: function onSuccess(data) {
           response('success', data);
         },
-        onError: err => {
+        onError: function onError(err) {
           response('error', err);
-          this.script.remove();
+
+          _this.script.remove();
         },
-        onClose: err => {
+        onClose: function onClose(err) {
           response('close', err);
-          this.script.remove();
+
+          _this.script.remove();
         }
       };
       var connect = new window.Connect(options);
       connect.setup();
       connect.open();
     };
+
+    return _this;
   }
 
-  componentDidMount() {
+  var _proto = Dojah.prototype;
+
+  _proto.componentDidMount = function componentDidMount() {
     this.start();
-  }
+  };
 
-  componentWillUnmount() {
+  _proto.componentWillUnmount = function componentWillUnmount() {
     this.stop();
-  }
+  };
 
-  render() {
+  _proto.render = function render() {
     return /*#__PURE__*/React.createElement(React.Fragment, null);
-  }
+  };
 
-}
+  return Dojah;
+}(Component);
 
 Dojah.config = {
   uri: 'https://services.elta.com.ng/doja/connect.js'
